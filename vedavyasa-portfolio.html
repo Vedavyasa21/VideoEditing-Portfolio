@@ -466,12 +466,18 @@ document.querySelectorAll('a,.pi,.cta,.mi,button,.svc,.sc').forEach(el=>{
   el.addEventListener('mouseleave',()=>curR.classList.remove('hov'));
 });
 
-// Video hover
+// Video hover and touch/click support
 document.querySelectorAll('.pi').forEach(item=>{
   const v=item.querySelector('.pvid');
   if(!v)return;
-  item.addEventListener('mouseenter',()=>{v.play().then(()=>item.classList.add('playing')).catch(()=>{});});
-  item.addEventListener('mouseleave',()=>{v.pause();v.currentTime=0;item.classList.remove('playing');});
+  const playVideo=()=>v.play().then(()=>item.classList.add('playing')).catch(()=>{});
+  const stopVideo=()=>{v.pause();v.currentTime=0;item.classList.remove('playing');};
+  item.addEventListener('mouseenter',playVideo);
+  item.addEventListener('mouseleave',stopVideo);
+  item.addEventListener('pointerdown',()=>{
+    if(item.classList.contains('playing')) stopVideo();
+    else playVideo();
+  });
 });
 
 // Scroll reveal
